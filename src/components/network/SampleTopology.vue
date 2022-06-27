@@ -9,7 +9,7 @@
 <script>
 import D3Network from 'vue-d3-network';
 import _ from 'lodash';
-// import { EventBus } from '@/utils/eventBus';
+import { EventBus } from '@/utils/eventBus';
 
 export default {
   name: 'SampleTopology',
@@ -25,14 +25,15 @@ export default {
     }
   },
   watch: {
-    inputNodeName(val) {
+    inputNodeName(newVal, oldVal) {
       let originNodes = _.cloneDeep(this.nodes);
-      const isDuplicate = originNodes.find((node) => node.name == val) != null ? true : false;
+      const isDuplicate = originNodes.find((node) => node.name == newVal) != null ? true : false;
+      console.log("oldVal : " + oldVal + ", newVal : " + newVal);
       if(isDuplicate) {
-        this.isDuplicate = true;
+        EventBus.$emit('responseIsDuplicate', true);
       }
       else {
-        this.receivedNewNode = val;
+        this.receivedNewNode = newVal;
         this.nodes.push({
           id: this.nodes.length + 1,
           name: this.receivedNewNode,
@@ -72,7 +73,6 @@ export default {
             nodeLabels: true,
             linkWidth: 5
         },
-        isDuplicate: false,
         receivedNewNode: ''
     }
   },

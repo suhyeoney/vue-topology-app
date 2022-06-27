@@ -37,7 +37,7 @@
 </template>
 
 <script>
-// import { EventBus } from '../utils/eventBus';
+import { EventBus } from '../utils/eventBus';
 
 export default {
   name: 'HelloWorld',
@@ -62,6 +62,10 @@ export default {
     },
     createNode() {
       this.$store.commit('create', this.inputNodeName);
+      EventBus.$off('responseIsDuplicate');
+      EventBus.$on('responseIsDuplicate', response => {
+        console.log(response);
+      });
     }
 
     // createNode() {
