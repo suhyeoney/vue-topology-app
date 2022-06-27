@@ -27,15 +27,55 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
+    <div>
+      노드명
+      <input type="text" v-model="inputNodeName" @keyup.enter="createNode" />
+      <button @click="createNode" :disabled="inputNodeName.length === 0">생성</button>
+    </div>
+    <span id="hintMessage">{{ hintMessage }}</span>
   </div>
 </template>
 
 <script>
+// import { EventBus } from '../utils/eventBus';
+
 export default {
   name: 'HelloWorld',
+  data() {
+    return {
+      inputNodeName: '',
+      hintMessage: ''
+    }
+  },
   props: {
     msg: String
-  }
+  },
+  watch: {
+    inputNodeName(newVal) {
+      newVal.length == 0 ? this.hintMessage = '생성할 노드명을 입력해주세요.' : this.hintMessage = '';
+    }
+  },
+  methods: {
+    init() {
+      this.inputNodeName = '';
+      this.hintMessage = '';
+    },
+    createNode() {
+      this.$store.commit('create', this.inputNodeName);
+    }
+
+    // createNode() {
+    //   if(this.inputNodeName != '') {
+    //     // EventBus.$emit('newNode', this.inputNodeName);
+    //     this.$store.commit('createNode', this.inputNodeName);
+    //     console.log(this.$store.state.inputNodeName);
+    //     this.init();
+    //   }
+    // },
+  },
+  mounted() {
+    this.init();
+  },
 }
 </script>
 
@@ -54,5 +94,8 @@ li {
 }
 a {
   color: #42b983;
+}
+#hintMessage {
+  color: red;
 }
 </style>
