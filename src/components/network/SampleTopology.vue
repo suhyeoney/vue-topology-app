@@ -1,8 +1,19 @@
 <template>
   <div id="app">
     <h1>{{ msg }}</h1>
-    <d3-network :net-nodes="nodes" :net-links="links" :options="options" />
-    <span v-if="inputNodeName !== ''">{{ inputNodeName }} 노드가 생성되었습니다.</span>
+    <div v-if="nodes.length !== 0">
+      <d3-network :net-nodes="nodes" :net-links="links" :options="options" />
+    </div>
+    <div v-else>
+      ##### 생성된 노드가 없습니다.  #####
+    </div>
+    <div v-if="nodes.length !== 0">
+      <span>{{ inputNodeName }} 노드가 생성되었습니다.</span>
+      <br>
+      <span>총 {{ nodes.length }} 개의 노드가 생성되었습니다.</span>
+      <br>
+      <button @click="clear">초기화</button>
+    </div>
   </div>
 </template>
 
@@ -20,8 +31,14 @@ export default {
     msg: String,
   },
   computed: {
-    inputNodeName() {
-      return this.$store.state.inputNodeName;
+    inputNodeName: {
+      get() {
+        return this.$store.state.inputNodeName;
+      },
+      set(newValue) {
+        console.log(newValue);
+        this.$store.state.inputNodeName = newValue;
+      }
     }
   },
   watch: {
@@ -42,7 +59,6 @@ export default {
           name: this.receivedNewNode,
           connected: 0
         });
-
         if(this.nodes.length > 1) {
           let randomlySelectedNodeId =  originNodes[Math.floor(Math.random() * originNodes.length)].id;
           let createdNodeId = this.nodes[this.nodes.length - 1].id;
@@ -63,7 +79,7 @@ export default {
           'value': newVal
         });
       }
-    }
+    },
   },
   data() {
     return {
@@ -92,6 +108,13 @@ export default {
       else if(remains == 3) return 'yellow';
       else if(remains == 4) return 'green';
       else return 'blue';
+    },
+
+    clear() {
+      this.nodes = [];
+      this.links = [];
+      this.receivedNewNode = '';
+      EventBus.$emit('clear', 'CLEAR');
     }
   },
   created() {

@@ -54,6 +54,11 @@ export default {
   watch: {
     inputNodeName(newVal) {
       newVal.length == 0 ? this.hintMessage = '생성할 노드명을 입력해주세요.' : this.hintMessage = '';
+      EventBus.$on('clear', (response) => {
+        if(response == 'CLEAR') {
+          this.init();
+        }
+      });
     },
   },
   methods: {
