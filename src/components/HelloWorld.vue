@@ -75,7 +75,6 @@ export default {
         this.tempInputNodeName = response.value;
         response.flag ? this.hintMessage = '이미 존재하는 노드명입니다.' : this.hintMessage = '';
       });
-      this.init();
     },
 
     // createNode() {
