@@ -44,7 +44,8 @@ export default {
   data() {
     return {
       inputNodeName: '',
-      hintMessage: ''
+      hintMessage: '',
+      tempInputNodeName: ''
     }
   },
   props: {
@@ -53,7 +54,7 @@ export default {
   watch: {
     inputNodeName(newVal) {
       newVal.length == 0 ? this.hintMessage = '생성할 노드명을 입력해주세요.' : this.hintMessage = '';
-    }
+    },
   },
   methods: {
     init() {
@@ -61,12 +62,21 @@ export default {
       this.hintMessage = '';
     },
     createNode() {
+      // 글로벌 변수(tempInputNodeName)로 저장한 노드명과 같으면, 이미 생성되어 있는 중복 노드로 판단
+      if(this.inputNodeName == this.tempInputNodeName) {
+         this.hintMessage = '이미 존재하는 노드명입니다';
+         return;
+      }
       this.$store.commit('create', this.inputNodeName);
       EventBus.$off('responseIsDuplicate');
       EventBus.$on('responseIsDuplicate', response => {
-        console.log(response);
+        // 직전(가장 최근)에 생성한 노드명을 글로벌 변수(tempInputNodeName)에 저장
+        // 중복 플래그로 중복 여부 판단
+        this.tempInputNodeName = response.value;
+        response.flag ? this.hintMessage = '이미 존재하는 노드명입니다.' : this.hintMessage = '';
       });
-    }
+      this.init();
+    },
 
     // createNode() {
     //   if(this.inputNodeName != '') {

@@ -13,7 +13,9 @@ export default new Vuex.Store({
         // create: (state, data) => (state.inputNodeName = data)
         create: (state, payload) => {
             state.inputNodeName = payload;
-            console.log(state);
+        },
+        initialize: (state) => {
+            state.inputNodeName = '';
         }
     },
 });

@@ -25,12 +25,15 @@ export default {
     }
   },
   watch: {
-    inputNodeName(newVal, oldVal) {
+    inputNodeName(newVal) {
       let originNodes = _.cloneDeep(this.nodes);
       const isDuplicate = originNodes.find((node) => node.name == newVal) != null ? true : false;
-      console.log("oldVal : " + oldVal + ", newVal : " + newVal);
       if(isDuplicate) {
-        EventBus.$emit('responseIsDuplicate', true);
+        EventBus.$emit('responseIsDuplicate', 
+        {
+          'flag': true,
+          'value': newVal
+        });
       }
       else {
         this.receivedNewNode = newVal;
@@ -54,6 +57,11 @@ export default {
             _color: this.setLinkColor(randomlySelectedNode)
           });
         }
+        EventBus.$emit('responseIsDuplicate', 
+        {
+          'flag': false,
+          'value': newVal
+        });
       }
     }
   },
