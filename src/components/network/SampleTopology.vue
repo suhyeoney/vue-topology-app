@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <button @click="openTopologyOptionsModal">토폴로지 옵션세팅</button>
     <h1>{{ msg }}</h1>
     <div v-if="nodes.length !== 0">
       <d3-network :net-nodes="nodes" :net-links="links" :options="options" />
@@ -14,18 +15,26 @@
       <br>
       <button @click="clear">초기화</button>
     </div>
+    <TopologyOptionsModal 
+    ref="topologyOptions" 
+    @openModal="openTopologyOptionsModal" 
+    :optionsKeys="Object.keys(options)"
+    :options="options"
+    ></TopologyOptionsModal>
   </div>
 </template>
 
 <script>
 import D3Network from 'vue-d3-network';
+import TopologyOptionsModal from './modal/TopologyOptionsModal.vue';
 import _ from 'lodash';
 import { EventBus } from '@/utils/eventBus';
 
 export default {
   name: 'SampleTopology',
   components: {
-    D3Network
+    D3Network,
+    TopologyOptionsModal
   },
   props: {
     msg: String,
@@ -101,6 +110,12 @@ export default {
     }
   },
   methods: {
+    openTopologyOptionsModal() {
+      console.log('Open Topology Options Modal');
+      this.$refs.topologyOptions.openModal();
+    },
+
+
     setLinkColor(node) { // 빨, 주, 노, 초, 파
       let remains = node.connected % 5;
       if(remains == 1) return 'red';
