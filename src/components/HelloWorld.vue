@@ -72,7 +72,7 @@ export default {
          this.hintMessage = '이미 존재하는 노드명입니다';
          return;
       }
-      this.$store.commit('create', this.inputNodeName);
+      this.$store.commit('createNode', this.inputNodeName);
       EventBus.$off('responseIsDuplicate');
       EventBus.$on('responseIsDuplicate', response => {
         // 직전(가장 최근)에 생성한 노드명을 글로벌 변수(tempInputNodeName)에 저장
@@ -81,15 +81,6 @@ export default {
         response.flag ? this.hintMessage = '이미 존재하는 노드명입니다.' : this.hintMessage = '';
       });
     },
-
-    // createNode() {
-    //   if(this.inputNodeName != '') {
-    //     // EventBus.$emit('newNode', this.inputNodeName);
-    //     this.$store.commit('createNode', this.inputNodeName);
-    //     console.log(this.$store.state.inputNodeName);
-    //     this.init();
-    //   }
-    // },
   },
   mounted() {
     this.init();

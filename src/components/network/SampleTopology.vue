@@ -18,8 +18,6 @@
     <TopologyOptionsModal 
     ref="topologyOptions" 
     @openModal="openTopologyOptionsModal" 
-    :optionsKeys="Object.keys(options)"
-    :options="options"
     ></TopologyOptionsModal>
   </div>
 </template>
@@ -45,8 +43,19 @@ export default {
         return this.$store.state.inputNodeName;
       },
       set(newValue) {
-        console.log(newValue);
         this.$store.state.inputNodeName = newValue;
+      }
+    },
+
+    options: {
+      get() {
+        return this.$store.state.options;
+      },
+      set(newValue) {
+        this.$store.state.options.force = newValue.force;
+        this.$store.state.options.nodeSize = newValue.nodeSize;
+        this.$store.state.options.nodeLabels = newValue.nodeLabels;
+        this.$store.state.options.linkWidth = newValue.linkWidth;
       }
     }
   },
@@ -100,21 +109,13 @@ export default {
         links: [
             // {sid: 1, tid: 2, _color: 'red'}
         ],
-        options: {
-            force: 3000,
-            nodeSize:15,
-            nodeLabels: true,
-            linkWidth: 5
-        },
         receivedNewNode: ''
     }
   },
   methods: {
     openTopologyOptionsModal() {
-      console.log('Open Topology Options Modal');
       this.$refs.topologyOptions.openModal();
     },
-
 
     setLinkColor(node) { // 빨, 주, 노, 초, 파
       let remains = node.connected % 5;
