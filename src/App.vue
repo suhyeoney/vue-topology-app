@@ -1,21 +1,23 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <SampleTopology msg="여기부터는 Topology 영역입니다." />
+    <button @click="gotoMain">메인 View로 이동</button>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import SampleTopology from './components/network/SampleTopology.vue'
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld,
-    SampleTopology
-  }
+  components: {},
+methods: {
+  movePage(page) {
+    this.$router.push({ name: page });
+  },
+
+  gotoMain() {
+    this.movePage('Main');
+  },
+},
 }
 </script>
 
